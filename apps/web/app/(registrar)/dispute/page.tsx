@@ -32,8 +32,10 @@ export default function DisputePage() {
   const [serial, setSerial] = useState("");
   const [txState, setTxState] = useState<TxState>({ status: "idle" });
 
+  // Match any connected Ethereum wallet, not just Privy's own embedded one —
+  // see the matching comment in app/(registrar)/register/page.tsx.
   const wallet = user?.linkedAccounts.find(
-    (account) => account.type === "wallet" && account.walletClientType === "privy" && account.chainType === "ethereum",
+    (account) => account.type === "wallet" && account.chainType === "ethereum",
   ) as WalletWithMetadata | undefined;
 
   async function handleDispute(e: FormEvent) {

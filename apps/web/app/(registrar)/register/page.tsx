@@ -32,8 +32,14 @@ export default function RegisterPage() {
   const [stake, setStake] = useState("0.05");
   const [txState, setTxState] = useState<TxState>({ status: "idle" });
 
+  // Match any connected Ethereum wallet, not just Privy's own embedded one —
+  // `walletClientType` is "metamask" (or another injected-wallet value) for
+  // an externally connected wallet like MetaMask, never "privy". Filtering
+  // on walletClientType === "privy" silently excluded every non-embedded
+  // wallet, which is why a genuinely connected MetaMask showed as
+  // disconnected here.
   const wallet = user?.linkedAccounts.find(
-    (account) => account.type === "wallet" && account.walletClientType === "privy" && account.chainType === "ethereum",
+    (account) => account.type === "wallet" && account.chainType === "ethereum",
   ) as WalletWithMetadata | undefined;
 
   async function handleRegister(e: FormEvent) {
