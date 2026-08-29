@@ -51,16 +51,23 @@ export default function RegisterPage() {
       const serialHash = hashSerial(serial.trim());
       const metadataHash = keccak256(toBytes(description.trim()));
 
-      const { hash } = await sendTransaction({
-        to: CACHET_REGISTRY_ADDRESS[10143],
-        data: encodeFunctionData({
-          abi: CachetRegistryAbi,
-          functionName: "registerDevice",
-          args: [serialHash, metadataHash],
-        }),
-        value: parseEther(stake.trim()),
-        chainId: 10143,
-      });
+      const { hash } = await sendTransaction(
+        {
+          to: CACHET_REGISTRY_ADDRESS[10143],
+          data: encodeFunctionData({
+            abi: CachetRegistryAbi,
+            functionName: "registerDevice",
+            args: [serialHash, metadataHash],
+          }),
+          value: parseEther(stake.trim()),
+          chainId: 10143,
+        },
+        // Tell Privy exactly which linked wallet to sign with — without this,
+        // it can't resolve which one to use once more than one wallet is
+        // linked (e.g. the auto-created embedded wallet plus a connected
+        // MetaMask), and throws "No embedded or connected wallet found".
+        { address: wallet?.address },
+      );
 
       setTxState({ status: "pending", hash });
 

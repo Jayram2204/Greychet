@@ -53,15 +53,19 @@ export default function DisputePage() {
         args: [serialHash],
       });
 
-      const { hash } = await sendTransaction({
-        to: CACHET_REGISTRY_ADDRESS[10143],
-        data: encodeFunctionData({
-          abi: CachetRegistryAbi,
-          functionName: "disputeDevice",
-          args: [serialHash],
-        }),
-        chainId: 10143,
-      });
+      const { hash } = await sendTransaction(
+        {
+          to: CACHET_REGISTRY_ADDRESS[10143],
+          data: encodeFunctionData({
+            abi: CachetRegistryAbi,
+            functionName: "disputeDevice",
+            args: [serialHash],
+          }),
+          chainId: 10143,
+        },
+        // See the matching comment in register/page.tsx.
+        { address: wallet?.address },
+      );
 
       setTxState({ status: "pending", hash, stakeBefore });
 
