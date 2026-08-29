@@ -5,7 +5,9 @@ import { encodeFunctionData, parseEther, keccak256, toBytes } from "viem";
 import { useLogin, useLogout, usePrivy, useSendTransaction, type WalletWithMetadata } from "@privy-io/react-auth";
 import { CachetRegistryAbi, CACHET_REGISTRY_ADDRESS, hashSerial, monadChains } from "@cachet/shared";
 import { publicClient } from "@/lib/viem-client";
-import { VerdictCard } from "@/components/verdict-card";
+import { VerdictCard, VerdictRow } from "@/components/verdict-card";
+import { SealPending } from "@/components/seal";
+import { Nav } from "@/components/nav";
 
 const EXPLORER_URL = monadChains.testnet.blockExplorers!.default.url;
 
@@ -63,92 +65,86 @@ export default function RegisterPage() {
     }
   }
 
-  if (!ready) return <p className="p-8 text-sm text-ink-muted">Loading…</p>;
+  if (!ready) return <p className="p-8 text-sm text-ash">Loading…</p>;
 
   return (
-    <main className="mx-auto max-w-lg px-6 py-20">
-      <h1 className="text-2xl font-semibold tracking-tight">Registrar dashboard</h1>
-      <p className="mt-3 max-w-md text-sm leading-relaxed text-ink-muted">
-        Register a device and lock a MON stake as a bond on its authenticity claim. This does not
-        physically inspect the device — it makes a false claim economically costly.
-      </p>
+    <>
+      <Nav address={wallet?.address} onLogin={() => login()} onLogout={logout} />
+      <main className="mx-auto max-w-lg px-6 py-20">
+        <h1 className="font-display text-2xl text-bone italic">Register a device</h1>
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-ash">
+          Register a device and lock a MON stake as a bond on its authenticity claim. This does not
+          physically inspect the device — it makes a false claim economically costly.
+        </p>
 
-      {!user ? (
-        <button
-          onClick={() => login()}
-          className="mt-8 rounded-sharp bg-ink px-5 py-2 text-sm font-medium text-paper transition-opacity hover:opacity-90"
-        >
-          Login
-        </button>
-      ) : (
-        <>
-          <div className="mt-6 flex items-center justify-between border border-line bg-white px-3 py-2 text-sm text-ink-muted">
-            <span className="break-all font-mono text-xs">{wallet?.address ?? "creating…"}</span>
-            <button onClick={logout} className="ml-3 shrink-0 text-ink underline underline-offset-4">
-              Logout
-            </button>
-          </div>
-
-          <form onSubmit={handleRegister} className="mt-6 flex flex-col gap-3">
+        {user && (
+          <form onSubmit={handleRegister} className="mt-8 flex flex-col gap-3">
             <input
               value={serial}
               onChange={(e) => setSerial(e.target.value)}
-              placeholder="Device serial number (dummy/demo only)"
-              className="rounded-sharp border border-line bg-white px-3 py-2 font-mono text-sm text-ink placeholder:font-sans placeholder:text-ink-muted focus:border-ink focus:outline-none"
+              placeholder="Serial / IMEI (dummy/demo only)"
+              className="rounded-control border border-line bg-ink-raised px-3 py-2 font-mono text-sm text-bone placeholder:font-sans placeholder:text-ash focus:border-seal-gold"
             />
             <input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description (e.g. iPhone 13, 128GB, Grade A)"
-              className="rounded-sharp border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-ink-muted focus:border-ink focus:outline-none"
+              placeholder="Condition claim (e.g. Certified refurbished, Grade A)"
+              className="rounded-control border border-line bg-ink-raised px-3 py-2 text-sm text-bone placeholder:text-ash focus:border-seal-gold"
             />
             <input
               value={stake}
               onChange={(e) => setStake(e.target.value)}
               placeholder="Stake amount (MON)"
               inputMode="decimal"
-              className="rounded-sharp border border-line bg-white px-3 py-2 font-mono text-sm text-ink placeholder:font-sans placeholder:text-ink-muted focus:border-ink focus:outline-none"
+              className="rounded-control border border-line bg-ink-raised px-3 py-2 font-mono text-sm text-bone placeholder:font-sans placeholder:text-ash focus:border-seal-gold"
             />
             <button
               type="submit"
               disabled={!wallet || txState.status === "pending"}
-              className="rounded-sharp bg-ink px-5 py-2 text-sm font-medium text-paper transition-opacity hover:opacity-90 disabled:bg-line disabled:text-ink-muted"
+              className="rounded-control bg-bone px-5 py-2 text-sm font-medium text-ink transition-opacity hover:opacity-90 disabled:bg-line-faint disabled:text-ash"
             >
-              {txState.status === "pending" ? "Confirming…" : "Register device"}
+              {txState.status === "pending" ? "Confirming…" : "Register & lock stake"}
             </button>
           </form>
-        </>
-      )}
+        )}
 
-      <div className="mt-6 min-h-[80px]">
-        {txState.status === "pending" && (
-          <p className="text-sm text-ink-muted">
-            Transaction sent —{" "}
-            <a className="text-ink underline underline-offset-4" href={`${EXPLORER_URL}/tx/${txState.hash}`} target="_blank" rel="noreferrer">
-              view on explorer
-            </a>{" "}
-            (waiting for confirmation…)
-          </p>
-        )}
-        {txState.status === "confirmed" && (
-          <VerdictCard variant="clean" title="Device registered on-chain">
-            <p>Block: {txState.blockNumber.toString()}</p>
-            <a
-              className="text-ink underline underline-offset-4"
-              href={`${EXPLORER_URL}/tx/${txState.hash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View transaction on explorer
-            </a>
-          </VerdictCard>
-        )}
-        {txState.status === "error" && (
-          <VerdictCard variant="disputed" title="Transaction failed">
-            {txState.message}
-          </VerdictCard>
-        )}
-      </div>
-    </main>
+        <div className="mt-6 min-h-[80px]">
+          {txState.status === "pending" && (
+            <div>
+              <SealPending />
+              <a
+                className="mt-2 inline-block text-sm text-bone underline underline-offset-4"
+                href={`${EXPLORER_URL}/tx/${txState.hash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                view transaction on explorer
+              </a>
+            </div>
+          )}
+          {txState.status === "confirmed" && (
+            <VerdictCard variant="clean" title="Verified">
+              <VerdictRow label="Block" value={txState.blockNumber.toString()} />
+              <div className="flex items-center justify-between gap-4 py-2.5">
+                <span className="font-mono text-xs tracking-wide text-ash uppercase">Tx</span>
+                <a
+                  className="font-mono text-sm text-bone underline underline-offset-4"
+                  href={`${EXPLORER_URL}/tx/${txState.hash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View transaction on explorer
+                </a>
+              </div>
+            </VerdictCard>
+          )}
+          {txState.status === "error" && (
+            <VerdictCard variant="disputed" title="Transaction failed">
+              {txState.message}
+            </VerdictCard>
+          )}
+        </div>
+      </main>
+    </>
   );
 }

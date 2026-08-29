@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -14,6 +14,15 @@ const plexMono = IBM_Plex_Mono({
   variable: "--font-mono",
 });
 
+// Certificate/display face — reserved for the rare ceremonial moments (verdict
+// headlines, the seal, certificate/report headers), never the page's default voice.
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["italic"],
+  weight: ["400", "500"],
+  variable: "--font-display",
+});
+
 export const metadata: Metadata = {
   title: "Cachet",
   description: "Device-authenticity trust registry on Monad",
@@ -21,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable} ${newsreader.variable}`}>
       <body>{children}</body>
     </html>
   );
