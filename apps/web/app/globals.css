@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Institutional palette — deliberately restrained, not a crypto-bright one. */
+  --color-ink: #14171c;
+  --color-ink-muted: #565d6b;
+  --color-paper: #fafaf9;
+  --color-line: #dcdcd8;
+
+  --color-status-clean: #1c5e3f;
+  --color-status-clean-bg: #f0f4f2;
+  --color-status-disputed: #7a1f1f;
+  --color-status-disputed-bg: #f7f0f0;
+  --color-status-neutral: #565d6b;
+  --color-status-neutral-bg: #f2f2f0;
+
+  --radius-sharp: 2px;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}

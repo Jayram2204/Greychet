@@ -1,0 +1,20 @@
+{
+  "name": "@cachet/shared",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "generate:abi": "node scripts/generate-abi.mjs",
+    "test:read": "tsx scripts/verify-read-check.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "viem": "2.56.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "4.23.12",
+    "typescript": "^5"
+  }
+}

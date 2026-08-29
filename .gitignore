@@ -1,0 +1,33 @@
+# Env
+.env
+.env.local
+.env.*.local
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+
+# Turborepo
+.turbo/
+
+# Next.js
+apps/web/.next/
+apps/web/out/
+
+# Foundry
+packages/contracts/out/
+packages/contracts/cache/
+# Real deployment broadcast receipts (tx hash, address, block) ARE committed as
+# an audit trail — only dry-run simulations and local Anvil (chain 31337) logs
+# are excluded, matching Foundry's own convention.
+packages/contracts/broadcast/**/dry-run/
+packages/contracts/broadcast/*/31337/
+
+# OS / editor
+.DS_Store
+*.log
+
+# Local AI-assistant tooling (not a project dependency — see NOTES.md)
+.claude/
+.vercel
+.env*
