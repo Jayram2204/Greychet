@@ -30,6 +30,8 @@ Exact versions this project was built and tested against:
 
 Install Foundry via `curl -L https://foundry.paradigm.xyz | bash && foundryup` if you don't have it. Everything else (Next.js 16.3.3, React 19.2.8, viem, OpenZeppelin Contracts v5.7.0) is pinned in the lockfile / `foundry.lock` and installed automatically below.
 
+You'll also need [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (or any way to get Node 24.20.0 on your PATH) and `git`.
+
 ## Setup
 
 ```bash
@@ -41,15 +43,22 @@ cd cachet
 # 2. Use the exact Node version this project was built with
 nvm install && nvm use   # reads .nvmrc
 
-# 3. Install JS/TS dependencies for the whole monorepo (web app + shared package)
+# 3. Get pnpm 11.24.0 (Node 24 ships corepack, which installs the exact
+#    version this project pins in package.json#packageManager)
+corepack enable
+corepack install
+
+# 4. Install JS/TS dependencies for the whole monorepo (web app + shared package)
 pnpm install
 
-# 4. Build and test the contracts
+# 5. Build and test the contracts
 cd packages/contracts
 forge build
-forge test
+forge test   # prints "No tests found in project!" and exits 0 — see note below
 cd ../..
 ```
+
+> **Honest gap:** this project currently ships zero Solidity unit tests. `forge test` exiting 0 with "No tests found" is expected today, not a passing test suite — don't mistake the two. CI runs `forge test` anyway so a real test suite starts passing automatically the moment one is added.
 
 ### Run the web app locally
 
@@ -64,7 +73,7 @@ To also use the registrar dashboard (`/register`, `/dispute`), which needs a wal
 
 1. Create a free app at https://dashboard.privy.io
 2. In that app's settings, add `http://localhost:3000` as an allowed origin
-3. Copy `.env.example` to `apps/web/.env.local` and fill in `NEXT_PUBLIC_PRIVY_APP_ID` (and optionally `NEXT_PUBLIC_PRIVY_CLIENT_ID`) from the Privy dashboard
+3. `cp .env.example apps/web/.env.local`, then edit that file and fill in `NEXT_PUBLIC_PRIVY_APP_ID` (and optionally `NEXT_PUBLIC_PRIVY_CLIENT_ID`) from the Privy dashboard — both are client-exposed by Privy's own design, not secrets, but keep this file local anyway (it's gitignored)
 4. Restart `pnpm --filter web dev`, then visit `http://localhost:3000/register`, log in (email/social — Privy provisions an embedded wallet automatically, no seed phrase needed), fund that wallet from https://faucet.monad.xyz, and register a device with a small MON stake
 
 ### Deploying your own contract instance (optional)
