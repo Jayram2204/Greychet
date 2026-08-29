@@ -4,7 +4,7 @@ A stake-backed device-authenticity registry on [Monad](https://monad.xyz) — a 
 
 [![CI](https://github.com/Jayram2204/cachet/actions/workflows/ci.yml/badge.svg)](https://github.com/Jayram2204/cachet/actions/workflows/ci.yml)
 
-- **Live app:** https://web-vert-eight-21.vercel.app
+- **Live app:** https://cachet-monad.vercel.app
 - **Deployed contract (Monad Testnet, chain ID `10143`):** [`0x061BC07fC7612bd5e08D00121273d7bA23D3BFcD`](https://testnet.monadscan.com/address/0x061BC07fC7612bd5e08D00121273d7bA23D3BFcD) — verified source, "Exact Match"
 
 ## What this is (and isn't)
