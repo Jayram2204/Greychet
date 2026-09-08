@@ -1,8 +1,8 @@
-# Cachet
+# Greychet
 
 A stake-backed device-authenticity registry on [Monad](https://monad.xyz) — a business locks a MON bond on a device's authenticity claim, anyone can verify it for free with no wallet, and a disputing buyer can slash a false claim.
 
-[![CI](https://github.com/Jayram2204/cachet/actions/workflows/ci.yml/badge.svg)](https://github.com/Jayram2204/cachet/actions/workflows/ci.yml)
+[![CI](https://github.com/Jayram2204/Greychet/actions/workflows/ci.yml/badge.svg)](https://github.com/Jayram2204/Greychet/actions/workflows/ci.yml)
 
 - **Live app:** https://cachet-monad.vercel.app
 - **Deployed contract (Monad Testnet, chain ID `10143`):** [`0x061BC07fC7612bd5e08D00121273d7bA23D3BFcD`](https://testnet.monadscan.com/address/0x061BC07fC7612bd5e08D00121273d7bA23D3BFcD) — verified source, "Exact Match"
@@ -37,8 +37,8 @@ You'll also need [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) (o
 ```bash
 # 1. Clone WITH submodules (forge-std and OpenZeppelin are git submodules —
 #    a plain clone leaves packages/contracts/lib/ empty and forge build will fail)
-git clone --recurse-submodules https://github.com/Jayram2204/cachet.git
-cd cachet
+git clone --recurse-submodules https://github.com/Jayram2204/Greychet.git
+cd Greychet
 
 # 2. Use the exact Node version this project was built with
 nvm install && nvm use   # reads .nvmrc
